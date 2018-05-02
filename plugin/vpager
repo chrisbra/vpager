@@ -33,11 +33,11 @@ main(){
   # vim options: to be set, e.g. filetype
   # only do it, if run inside a Vim terminal, e.g. VIM_SERVERNAME is set
   if [ -z "${VIM_SERVERNAME+x}" ]; then
-    # variable unset, not running inside Vim, so simply dump out the input
-    echo `cat`
+    # variable unset, not running inside Vim, so simply dump out the input through a pager
+    printf "%s\n" "`cat`" | ${PAGER}
   else
     while read line; do
-      echo "$line" | sed -e "s/.*/${PRE} [\"vpager:${SEQ}:${NEW}\", \"${VIMOPT}\", \"\0\"]${POST}\0/"
+      printf "%s\n" "$line" | sed -e "s/.*/${PRE} [\"vpager:${SEQ}:${NEW}\", \"${VIMOPT}\", \"\0\"]${POST}\0/"
     done
   fi
 }
