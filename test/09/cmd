@@ -1,0 +1,1 @@
+vpager -nC 'ft=diff' file1

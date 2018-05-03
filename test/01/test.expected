@@ -1,10 +1,11 @@
-NAME
-
+NAME 
     This script vpager can be used as pager from inside Vims built-in
     terminal. The output will be copied to a new buffer in Vim.
 
+    If it is not run from within vim, will simply copy the input to the output.
+
 SYNOPSIS
-    vpager [-n -C option]
+    vpager [-nV -C option] [File]
     vpager [-h|-v]
 
     -v	display version
@@ -20,3 +21,4 @@ EXAMPLES
   Copies the output of git diff into a buffer inside Vim. Any previous
   output in the buffer will be cleared and the filetype will be set
   to "diff", for proper syntax highlighting.
+

@@ -11,8 +11,8 @@ for i in */; do
   (
     cd "$i" &&
     test -f "cmd" &&
-    ./cmd > test.out &&
-    diff -qu test.expected  test.out >/dev/null ;
+    ./cmd > test.out
+    diff -qu test.expected  test.out >/dev/null
     if [ $? -ne 0 ]; then
       printf "Test %s:\t\t[${red}Failed${reset}]\n" ${i%%/}
       diff -u test.expected test.out

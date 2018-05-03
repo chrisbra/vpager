@@ -1,0 +1,4 @@
+]51;["call", "Tapi_Vpager_setup", ["vpager_setup", "%d _","setl ft=diff","wincmd H"]]]51;["call", "Tapi_Vpager",  ["vpager", "foobar \"one two\" "]]foobar "one two" 
+]51;["call", "Tapi_Vpager",  ["vpager", " 1/2"]] 1/2
+]51;["call", "Tapi_Vpager",  ["vpager", " [ some more "]] [ some more 
+]51;["call", "Tapi_Vpager",  ["vpager", " input \u001b \u001b \\ ] "]] input   \ ] 

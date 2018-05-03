@@ -1,0 +1,6 @@
+vpager: [31mError[m: no input available.
+
+SYNOPSIS
+    vpager [-nV -C option] [File]
+    vpager [-h|-v]
+
