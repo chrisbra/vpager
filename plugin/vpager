@@ -1,21 +1,19 @@
 #!/bin/sh
-# {{{1Header comments and license
+#
 # Shell script to be used as pager from inside Vims Terminal
 #
 # The output will be send to Vim to be opened in a new buffer
 #
 # Author: Christian Brabandt <cb@256bit.org>
+# Repository: https://github.com/chrisbra/vpager
 # License: BSD
 VERSION=0.2
-
 pre_init() { #{{{1 Set some variables that will always be read
 #set -x
 red=$(tput setaf 1)
 green=$(tput setaf 2)
 reset=$(tput sgr0)
 }
-
-
 init(){ #{{{1 initialize some Variables needed to control options send to Vim
   set bell-style none
   ESC=`printf "\e"`
@@ -26,7 +24,6 @@ init(){ #{{{1 initialize some Variables needed to control options send to Vim
   NEW="${NEW:=}"
   VERT="${VERT:=}"
 }
-
 vim_setup(){ #{{{1 Send initial options to Vim.
   ARG=""
   if [ -n "${NEW}" ]; then
@@ -49,11 +46,9 @@ vim_setup(){ #{{{1 Send initial options to Vim.
   ARG="[\"vpager_setup\", ${ARG:=\"\"}]";
   printf "${ESC}]51;[\"call\", \"Tapi_Vpager_setup\", ${ARG}]${BELL}"
 }
-
 json_escape() { #{{{1 JSON Escape the input, uses python
   printf '%s' "$1" | python -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
 }
-
 main(){ #{{{1 Send input to Vim
   # The interface is something like this:
   # <ESC>]51;["call", "Tapi_Vpager", [args]]
@@ -72,8 +67,6 @@ main(){ #{{{1 Send input to Vim
     printf "${PRE} [\"vpager\", %s]${POST}${line}\n" "$escaped"
   done < "$INPUT"
 }
-
-
 usage() { #{{{1 Print Usage
 cat << EOF
 
@@ -83,7 +76,6 @@ SYNOPSIS
 
 EOF
 }
-
 display_help(){ #{{{1 Print help
 cat << EOF
 NAME 
@@ -110,13 +102,11 @@ EXAMPLES
 
 EOF
 }
-
 getVersion(){ #{{{1 Print version
 cat <<EOF
 $(basename "${0}") Version: ${VERSION}
 EOF
 }
-
 check_input() { #{{{ Check if reading stdin or a file
   INPUT="${INPUT:=/dev/stdin}"
   if [ -t 0 -a -z "$1" ]; then
@@ -127,7 +117,6 @@ check_input() { #{{{ Check if reading stdin or a file
     INPUT=$1
   fi
 }
-
 #{{{1End of sub-routine, main flow
 # Process commandline parameters
 while getopts "nhvVC:" ARGS; do
