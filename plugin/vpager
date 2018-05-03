@@ -1,17 +1,22 @@
 #!/bin/sh
-
+# {{{1Header comments and license
 # Shell script to be used as pager from inside Vims Terminal
 #
 # The output will be send to Vim to be opened in a new buffer
 #
 # Author: Christian Brabandt <cb@256bit.org>
 # License: BSD
-VERSION=0.1
+VERSION=0.2
 
+pre_init() { #{{{1 Set some variables that will always be read
 #set -x
+red=$(tput setaf 1)
+green=$(tput setaf 2)
+reset=$(tput sgr0)
+}
 
-# initialize some Variables needed to control options send to Vim
-init(){
+
+init(){ #{{{1 initialize some Variables needed to control options send to Vim
   set bell-style none
   ESC=`printf "\e"`
   BELL=`printf "\a"`
@@ -22,8 +27,7 @@ init(){
   VERT="${VERT:=}"
 }
 
-vim_setup(){
-  # Send initial commands to Vim to setup correctly
+vim_setup(){ #{{{1 Send initial options to Vim.
   ARG=""
   if [ -n "${NEW}" ]; then
     ARG="${ARG}\"%%d _\""
@@ -46,11 +50,11 @@ vim_setup(){
   printf "${ESC}]51;[\"call\", \"Tapi_Vpager_setup\", ${ARG}]${BELL}"
 }
 
-json_escape() {
+json_escape() { #{{{1 JSON Escape the input, uses python
   printf '%s' "$1" | python -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
 }
 
-main(){
+main(){ #{{{1 Send input to Vim
   # The interface is something like this:
   # <ESC>]51;["call", "Tapi_Vpager", [args]]
   # with args a list with the following elements:
@@ -66,21 +70,30 @@ main(){
   while IFS= read -r line; do
     escaped=`json_escape "$line"`
     printf "${PRE} [\"vpager\", %s]${POST}${line}\n" "$escaped"
-  done
+  done < "$INPUT"
 }
 
 
-display_help(){
+usage() { #{{{1 Print Usage
 cat << EOF
-NAME
 
+SYNOPSIS
+    `basename $0` [-nV -C option] [File]
+    `basename $0` [-h|-v]
+
+EOF
+}
+
+display_help(){ #{{{1 Print help
+cat << EOF
+NAME 
     This script `basename $0` can be used as pager from inside Vims built-in
     terminal. The output will be copied to a new buffer in Vim.
 
-SYNOPSIS
-    `basename $0` [-n -C option]
-    `basename $0` [-h|-v]
-
+    If it is not run from within vim, will simply copy the input to the output.
+EOF
+usage
+cat << EOF
     -v	display version
     -h	display help
     -C	Pass options to Vim. Can be used to e.g. set the filetype for
@@ -94,15 +107,28 @@ EXAMPLES
   Copies the output of git diff into a buffer inside Vim. Any previous
   output in the buffer will be cleared and the filetype will be set
   to "diff", for proper syntax highlighting.
+
 EOF
 }
 
-getVersion(){
+getVersion(){ #{{{1 Print version
 cat <<EOF
 $(basename "${0}") Version: ${VERSION}
 EOF
 }
 
+check_input() { #{{{ Check if reading stdin or a file
+  INPUT="${INPUT:=/dev/stdin}"
+  if [ -t 0 -a -z "$1" ]; then
+    printf "`basename $0`: ${red}Error${reset}: no input available.\n"
+    usage
+    exit 1;
+  elif [ -n "$1" ]; then
+    INPUT=$1
+  fi
+}
+
+#{{{1End of sub-routine, main flow
 # Process commandline parameters
 while getopts "nhvVC:" ARGS; do
   case ${ARGS} in
@@ -117,9 +143,14 @@ done
 
 shift `expr ${OPTIND} - 1`
 
+pre_init
+check_input $1
+
 if [ -z "${VIM_SERVERNAME+x}" ]; then
   # variable unset, not running inside Vim, so simply dump the input
-  printf "%s\n" "`cat`"
+  while IFS= read -r line; do
+    printf "%s\n" "$line"
+  done < "$INPUT"
 else
   init
   vim_setup
