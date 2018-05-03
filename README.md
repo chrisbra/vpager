@@ -17,10 +17,9 @@ Use the provided `vpager.sh` script and pipe input into it. I suggest to put it 
 
 The script supports the following options:
 
-#### Ex commands:
+#### commands:
 ```shell
 NAME
-
     This script vpager can be used as pager from inside Vims built-in
     terminal. The output will be copied to a new buffer in Vim.
 
@@ -33,6 +32,7 @@ SYNOPSIS
     -C  Pass options to Vim. Can be used to e.g. set the filetype for
         correct syntax highlighting.
     -n  Clear the previous buffer in Vim
+    -V  create a new vertical window in Vim
 
 EXAMPLES
   git diff | vpager -nC 'ft=diff'
