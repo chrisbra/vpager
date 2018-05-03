@@ -1,0 +1,1 @@
+printf "foobar \"one two\" \n 1/2\n" | vpager -VnC 'ft=diff' 
