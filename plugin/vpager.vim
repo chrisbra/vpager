@@ -16,47 +16,55 @@ let s:keepcpo          = &cpo
 set cpo&vim
 "}}}1
 
-let s:bufname = 'Vpager.txt'
+let s:bufname = 'VPAGER'
 let s:seq = 0
 
-function! Tapi_Vpager(bufnum, arglist)
-  if type(a:arglist) == type([]) && len(a:arglist) >= 3
-    " Safety meaure
-    let header=split(a:arglist[0], ':')
-    if header[0] ==# 'vpager'
-      let seq = header[1]
-      " Create window
-      if bufexists(s:bufname)
-        if bufwinnr(bufnr(s:bufname)) == -1
-          exe ":sp" s:bufname
-        else
-          exe ":noa :drop" s:bufname
-        endif
-      else
-        exe ":sp" s:bufname
-      endif
-
-      if s:seq < seq
-        setl buftype=nofile
-        if len(header) > 2 && header[2] ==? 'new'
-          noa %d _
-        endif
-        " Check for additional options
-        if !empty(a:arglist[1])
-          try
-            exe "setl" a:arglist[1]
-          endtry
-        endif
-        let s:seq = seq
-      endif
-      " Append output
-      call append('$', a:arglist[2:])
-      if getline(1) == ''
-        :noa 1d _
-      endif
-      $
-      noa wincmd p
+function! s:SetupWindow()
+  " Create window
+  if bufexists(s:bufname)
+    if bufwinnr(bufnr(s:bufname)) == -1
+      exe ":sp" s:bufname
+    else
+      exe ":noa :drop" s:bufname
     endif
+  else
+    exe ":sp" s:bufname
+  endif
+  return win_getid()
+endfu
+
+function! Tapi_Vpager_setup(bufnum, arglist)
+  if type(a:arglist) == type([]) && len(a:arglist) > 1
+        \ && a:arglist[0] ==# 'vpager_setup'
+    let s:winid = s:SetupWindow()
+    setl buftype=nofile
+    for value in a:arglist[1:]
+      try
+        exe "sil " value
+      endtry
+    endfor
+  endif
+endfunction
+
+function! Tapi_Vpager(bufnum, arglist)
+  " Safety meaure
+  if type(a:arglist) == type([]) && len(a:arglist) >= 2
+        \ && a:arglist[0] ==# 'vpager'
+    if !exists("s:winid")
+      let s:winid = s:SetupWindow()
+    endif
+    if s:winid != win_getid()
+      call win_gotoid(s:winid)
+    endif
+    " Append output
+    try
+      call append('$', a:arglist[1:])
+    catch
+      echo v:exception
+      echo a:arglist
+    endtry
+    " go back to terminal window
+    noa wincmd p
   endif
 endfu
 " ---------------------------------------------------------------------
