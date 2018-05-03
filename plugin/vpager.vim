@@ -6,6 +6,8 @@
 " License: VIM License
 " GetLatestVimScripts: ???? 18 :AutoInstall: vpager.vim
 " Documentation: see :h vpager.txt (TODO!)
+" TODO: - Remove ANSI Escape Sequences?
+"       - allow option to pass current PWD to Vim
 " ---------------------------------------------------------------------
 " Load Once: {{{1
 if exists("g:loaded_vpager") || &cp
@@ -15,9 +17,6 @@ let g:loaded_vpager = 1
 let s:keepcpo          = &cpo
 set cpo&vim
 "}}}1
-
-let s:bufname = 'VPAGER'
-let s:seq = 0
 
 function! s:SetupWindow()
   " Create window
