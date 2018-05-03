@@ -10,21 +10,52 @@ VERSION=0.1
 
 #set -x
 
-ESC=`printf "\e"`
-BELL=`printf "\a"`
-PRE=${ESC}']51;["call", "Tapi_Vpager", '
-POST=']'${BELL}
-SEQ=`date +"%s"`
-VIMOPT=""
-NEW=""
+# initialize some Variables needed to control options send to Vim
+init(){
+  set bell-style none
+  ESC=`printf "\e"`
+  BELL=`printf "\a"`
+  PRE=${ESC}']51;["call", "Tapi_Vpager", '
+  POST=']'${BELL}
+  VIMOPT="${VIMOPT:=}"
+  NEW="${NEW:=}"
+  VERT="${VERT:=}"
+}
+
+vim_setup(){
+  # Send initial commands to Vim to setup correctly
+  ARG=""
+  if [ -n "${NEW}" ]; then
+    ARG="${ARG}\"%%d _\""
+  fi
+  if [ -n "${VIMOPT}" ]; then
+    if [ -n "${ARG}" ]; then
+      # add trailing comma
+      ARG="${ARG},";
+    fi
+    ARG="${ARG}\"setl ${VIMOPT}\"";
+  fi
+  if [ -n "${VERT}" ]; then
+    if [ -n "${ARG}" ]; then
+      # add trailing comma
+      ARG="${ARG},";
+    fi
+    ARG="${ARG}\"wincmd H\"";
+  fi
+  ARG="[\"vpager_setup\", ${ARG:=\"\"}]";
+  printf "${ESC}]51;[\"call\", \"Tapi_Vpager_setup\", ${ARG}]${BELL}"
+}
+
+json_escape() {
+  printf '%s' "$1" | python -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
+}
 
 main(){
   # The interface is something like this:
   # <ESC>]51;["call", "Tapi_Vpager", [args]]
   # with args a list with the following elements:
-  # 0] vpager:<unix_timestamp>:
-  # 1] vim options
-  # 2] output to be copied into a vim buffer, one item per line
+  # 0] vpager
+  # 1] output to be copied into a vim buffer, one item per line
   #
   # The Unix timestamp is there to distinguish between each call of vpager,
   # so while `seq 1 10 | vpager ` will only call vpager once, it is not clear
@@ -32,15 +63,12 @@ main(){
   #
   # vim options: to be set, e.g. filetype
   # only do it, if run inside a Vim terminal, e.g. VIM_SERVERNAME is set
-  if [ -z "${VIM_SERVERNAME+x}" ]; then
-    # variable unset, not running inside Vim, so simply dump out the input through a pager
-    printf "%s\n" "`cat`" | ${PAGER}
-  else
-    while read line; do
-      printf "%s\n" "$line" | sed -e "s/.*/${PRE} [\"vpager:${SEQ}:${NEW}\", \"${VIMOPT}\", \"\0\"]${POST}\0/"
-    done
-  fi
+  while IFS= read -r line; do
+    escaped=`json_escape "$line"`
+    printf "${PRE} [\"vpager\", %s]${POST}${line}\n" "$escaped"
+  done
 }
+
 
 display_help(){
 cat << EOF
@@ -58,6 +86,7 @@ SYNOPSIS
     -C	Pass options to Vim. Can be used to e.g. set the filetype for
         correct syntax highlighting.
     -n  Clear the previous buffer in Vim
+    -V  Open a vertical split window in Vim
 
 EXAMPLES
   git diff | vpager -nC 'ft=diff'
@@ -75,17 +104,24 @@ EOF
 }
 
 # Process commandline parameters
-while getopts "nhvC:" ARGS; do
+while getopts "nhvVC:" ARGS; do
   case ${ARGS} in
     v) getVersion; exit 0 ;;
     C) VIMOPT=${OPTARG} ;;
-    n) NEW="new" ;;
+    n) NEW="1" ;;
+    V) VERT="1" ;;
     h) display_help; exit 0 ;;
-    ?) display_help; exit 0 ;;
     *) display_help; exit 1 ;;
   esac
 done
 
 shift `expr ${OPTIND} - 1`
 
-main
+if [ -z "${VIM_SERVERNAME+x}" ]; then
+  # variable unset, not running inside Vim, so simply dump the input
+  printf "%s\n" "`cat`"
+else
+  init
+  vim_setup
+  main
+fi
