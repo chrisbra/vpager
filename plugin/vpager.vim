@@ -12,13 +12,14 @@
 " Load Once: {{{1
 if exists("g:loaded_vpager") || &cp
   finish
+elseif !(v:version > 800 || v:version == 800 && has("patch1647"))
+  echoerr "Vpager needs at least Vim 8.0.1647"
+  finish
 endif
 let g:loaded_vpager = 1
-let s:keepcpo          = &cpo
+let s:keepcpo       = &cpo
 set cpo&vim
-"}}}1
-
-function! s:SetupWindow()
+function! s:SetupWindow() "{{{1 Setup VPAGER Window
   " Create window
   if bufexists(s:bufname)
     if bufwinnr(bufnr(s:bufname)) == -1
@@ -31,8 +32,7 @@ function! s:SetupWindow()
   endif
   return win_getid()
 endfu
-
-function! Tapi_Vpager_setup(bufnum, arglist)
+function! Tapi_Vpager_setup(bufnum, arglist) "{{{1 Setup VPAGER Options
   if type(a:arglist) == type([]) && len(a:arglist) > 1
         \ && a:arglist[0] ==# 'vpager_setup'
     let s:winid = s:SetupWindow()
@@ -44,8 +44,7 @@ function! Tapi_Vpager_setup(bufnum, arglist)
     endfor
   endif
 endfunction
-
-function! Tapi_Vpager(bufnum, arglist)
+function! Tapi_Vpager(bufnum, arglist) "{{{1 Read Vpager input
   " Safety meaure
   if type(a:arglist) == type([]) && len(a:arglist) >= 2
         \ && a:arglist[0] ==# 'vpager'
@@ -66,8 +65,6 @@ function! Tapi_Vpager(bufnum, arglist)
     noa wincmd p
   endif
 endfu
-" ---------------------------------------------------------------------
-" Public Interface {{{1
 " Restoration And Modelines: {{{1
 let &cpo= s:keepcpo
 unlet s:keepcpo
