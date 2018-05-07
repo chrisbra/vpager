@@ -1,0 +1,158 @@
+*vpager.txt*   Pipe output from Vims terminal back into Vim
+
+Author:  Christian Brabandt <cb@256bit.org>
+Version: 0.1 Mon, May 7th, 2018
+
+============================================================================
+1. Contents                                                           *VPager*
+============================================================================
+
+        1.  Contents.................................: |VPager|
+        2.  Configuration............................: |VPager-config|
+        3.  Feedback.................................: |VPager-feedback|
+        4.  License. ................................: |VPager-license|
+        5.  Changelog................................: |VPager-changelog|
+
+
+VPager is a plugin, that allows to pipe output from Vims internal |terminal|
+back to Vim. For that purpose, it comes with a pager like shell script, that
+works as a pager, meaning each Input that is piped into it, will be processed
+and send to Vim (to a new window) and also send back to the terminal.
+
+This allows to e.g. list directory contents and have the contents available in
+Vim (from which you could access the files easily using |gf|: >
+
+        user@host:/tmp$ ls -1 |vpager
+        file1
+        file2
+        […]
+        user@host:/tmp$ 
+<
+It will open a new Vim window with the name VPAGER which also contains the
+piped information:
+
+So if you current Vim window looks like this with your cursor in the terminal
+window (upper window) and you are about to enter the command `ls | vpager`
+-------------------------------------------------------------------------, `
+|chrisbra@debian:/tmp$ ls | vpager                                       | `
+|                                                                        | `
+|                                                                        | `
+|                                                                        | `
+|                                                                        | `
+|                                                                        | `
+|------------------------------------------------------------------------| `
+| TERMINAL  !zsh [chrisbra@debian: /tmp]                 ☰    1  /34 ㏑  | `
+|------------------------------------------------------------------------| `
+|                                                                        | `
+|                                                                        | `
+|                                                                        | `
+|                                                                        | `
+|                                                                        | `
+|                                                                        | `
+|                                                                        | `
+|------------------------------------------------------------------------| `
+| INSERT | [No Name]                                  |100% ☰    0:  1   | `
+`------------------------------------------------------------------------´ `
+
+Afterwards it will look like this:
+
+-------------------------------------------------------------------------, `
+|chrisbra@debian:/tmp$ ls | vpager                                       | `
+| file1.txt                                                              | `
+| file2.txt                                                              | `
+|chrisbra@debian:/tmp$                                                   | `
+|------------------------------------------------------------------------| `
+| TERMINAL  !zsh [chrisbra@debian: /tmp]                 ☰    1  /34 ㏑  | `
+|------------------------------------------------------------------------| `
+| file1.txt                                                              | `
+| file2.txt                                                              | `
+|                                                                        | `
+|------------------------------------------------------------------------| `
+| INSERT | VPAGER                                     |100% ☰    0:  1   | `
+`------------------------------------------------------------------------´ `
+|                                                                        | `
+|                                                                        | `
+|                                                                        | `
+|------------------------------------------------------------------------| `
+| INSERT | [No Name]                                  |100% ☰    0:  1   | `
+`------------------------------------------------------------------------´ `
+
+Note: there is a new Vim window, that is called `VPAGER` and contains the
+content, that was the result from the entered command.
+
+A screen capture can be found here: https://github.com/chrisbra/vpager
+
+                                                                  *vpager-sh*
+The shell script vpager is distributed alongside with the vpager Vim plugin
+and resides in the plugin/ folder. It is best to copy it to your local $PATH
+and make it executable (`chmod +x vpager`).
+
+The vpager shell script supports some arguments to configure how the content
+will be handled by Vim. So you can e.g. tell Vim to handle the resulting
+buffer as diff content, so that the buffer will be nicely highlighted. This is
+done using the `-C` argument >
+
+        ~$ git diff | vpager -nC 'ft=diff'
+
+Currently the shell script supports the following options and arguments: >
+
+ NAME
+    This script vpager can be used as pager from inside Vims built-in
+    terminal. The output will be copied to a new buffer in Vim.
+
+    If it is not run from within vim, will simply copy the input to the
+    output.
+
+ SYNOPSIS
+    vpager [-nV -C option] [File]
+    vpager [-h|-v]
+
+    -v  display version
+    -h  display help
+    -C  Pass options to Vim. Can be used to e.g. set the filetype for
+        correct syntax highlighting.
+    -n  Clear the previous buffer in Vim
+    -V  Open a vertical split window in Vim
+
+ EXAMPLES
+  git diff | vpager -nC 'ft=diff'
+
+  Copies the output of git diff into a buffer inside Vim. Any previous
+  output in the buffer will be cleared and the filetype will be set
+  to "diff", for proper syntax highlighting.
+
+============================================================================
+2. Configuration                                               *VPager-config*
+============================================================================
+
+None yet.
+
+============================================================================
+3. Plugin Feedback                                           *VPager-feedback*
+============================================================================
+
+Feedback is always welcome. Please don't hesitate to report any bugs to the
+maintainer, mentioned in the third line of this document.
+
+You can also follow the development of the plugin at github:
+http://github.com/chrisbra/vpager
+
+============================================================================
+4. Plugin License                                           *Vpager-license*
+============================================================================
+Copyright: (©) 2018 by Christian Brabandt
+           The VIM LICENSE (see |copyright|) applies to VPager.vim
+           except use VPager instead of "Vim". The included shell
+           script is licensed under a 2 clause BSD license.
+           NO WARRANTY, EXPRESS OR IMPLIED.  USE AT-YOUR-OWN-RISK.
+============================================================================
+5. Changelog                                              *Vpager-changelog*
+============================================================================
+
+0.1: May 7th, 2018 "{{{1
+
+- Initial version
+
+==============================================================================
+Modeline: "{{{1
+vim:tw=78:ts=8:ft=help:et:fdm=marker:fdl=0:norl
