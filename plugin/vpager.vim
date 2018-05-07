@@ -63,6 +63,9 @@ function! Tapi_Vpager(bufnum, arglist) "{{{1 Read Vpager input
       echo a:arglist
     endtry
     " go back to terminal window
+    if getline(1) == ''
+      1d
+    endif
     noa wincmd p
   endif
 endfu
