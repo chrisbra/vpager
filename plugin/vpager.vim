@@ -1,6 +1,6 @@
 " Vim plugin copying terminal output to a Vim window
-" Last Change: Thu, 15 Jan 2015 21:26:55 +0100
-" Version: 0.19
+" Last Change: 
+" Version: 0.1
 " Author: Christian Brabandt <cb@256bit.org>
 " Script:  http://www.vim.org/scripts/script.php?script_id=
 " License: VIM License
@@ -18,6 +18,7 @@ elseif !(v:version > 800 || v:version == 800 && has("patch1647"))
 endif
 let g:loaded_vpager = 1
 let s:keepcpo       = &cpo
+let s:bufname       = 'VPAGER'
 set cpo&vim
 function! s:SetupWindow() "{{{1 Setup VPAGER Window
   " Create window
