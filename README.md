@@ -15,7 +15,7 @@ Also available at [vim.org](https://www.vim.org/scripts/script.php?script_id=568
 ### Usage
 This makes use of Vims built in terminal and the provided terminal API. You need at least Vim version [8.0.1647](https://github.com/vim/vim/releases/tag/v8.0.1647)
 
-Use the provided `vpager.sh` script and pipe input into it. I suggest to put it into your $PATH, to be easily available.
+Use the provided `vpager.sh` script and pipe input into it. I suggest to put it into your $PATH, to be easily available. Note, it requires python, to properly json encode the input.
 
 The script supports the following options:
 
