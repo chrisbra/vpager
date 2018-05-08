@@ -2,9 +2,9 @@
 " Last Change: 
 " Version: 0.1
 " Author: Christian Brabandt <cb@256bit.org>
-" Script:  http://www.vim.org/scripts/script.php?script_id=
+" Script:  http://www.vim.org/scripts/script.php?script_id=5682
 " License: VIM License
-" GetLatestVimScripts: ???? 18 :AutoInstall: vpager.vim
+" GetLatestVimScripts: 5682 1 :AutoInstall: vpager.vim
 " Documentation: see :h vpager.txt (TODO!)
 " TODO: - Remove ANSI Escape Sequences?
 "       - allow option to pass current PWD to Vim

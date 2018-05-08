@@ -10,6 +10,8 @@ See also the following screencast:
 ### Installation
 Use the plugin manager of your choice.
 
+Also available at [vim.org](https://www.vim.org/scripts/script.php?script_id=5682)
+
 ### Usage
 This makes use of Vims built in terminal and the provided terminal API. You need at least Vim version [8.0.1647](https://github.com/vim/vim/releases/tag/v8.0.1647)
 
