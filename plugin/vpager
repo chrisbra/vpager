@@ -14,6 +14,13 @@ red=$(tput setaf 1)
 green=$(tput setaf 2)
 reset=$(tput sgr0)
 }
+check_python() { # Check existence of python, because is needed for json encoding {{{1
+# Check for existence of python
+if ! which python > /dev/null ; then
+  echo "Python does not exist"
+  exit 2
+fi
+}
 init(){ #{{{1 initialize some Variables needed to control options send to Vim
   set bell-style none
   ESC=`printf "\e"`
@@ -23,6 +30,8 @@ init(){ #{{{1 initialize some Variables needed to control options send to Vim
   VIMOPT="${VIMOPT:=}"
   NEW="${NEW:=}"
   VERT="${VERT:=}"
+
+  check_python
 }
 vim_setup(){ #{{{1 Send initial options to Vim.
   ARG=""
