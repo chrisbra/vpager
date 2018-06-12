@@ -64,13 +64,6 @@ main(){ #{{{1 Send input to Vim
   # with args a list with the following elements:
   # 0] vpager
   # 1] output to be copied into a vim buffer, one item per line
-  #
-  # The Unix timestamp is there to distinguish between each call of vpager,
-  # so while `seq 1 10 | vpager ` will only call vpager once, it is not clear
-  # from inside vim when a single session stopped, so add a timestamp there
-  #
-  # vim options: to be set, e.g. filetype
-  # only do it, if run inside a Vim terminal, e.g. VIM_SERVERNAME is set
   while IFS= read -r line; do
     escaped=`json_escape "$line"`
     printf "${PRE} [\"vpager\", %s]${POST}${line}\n" "$escaped"
@@ -144,7 +137,7 @@ shift `expr ${OPTIND} - 1`
 pre_init
 check_input $1
 
-if [ -z "${VIM_SERVERNAME+x}" ]; then
+if [ -z "${VIM_TERMINAL+x}" ]; then
   # variable unset, not running inside Vim, so simply dump the input
   while IFS= read -r line; do
     printf "%s\n" "$line"

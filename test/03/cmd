@@ -1,1 +1,1 @@
-echo "1" | VIM_SERVERNAME=1 vpager
+echo "1" | VIM_TERMINAL=1 vpager

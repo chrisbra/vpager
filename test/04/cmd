@@ -1,1 +1,1 @@
-printf "foobar \"one two\" \n 1/2\n" | VIM_SERVERNAME=1 vpager -VnC 'ft=diff' 
+printf "foobar \"one two\" \n 1/2\n" | VIM_TERMINAL=1 vpager -VnC 'ft=diff' 

@@ -1,1 +1,1 @@
-ls --color=always -1 | VIM_SERVERNAME=1 vpager -VnC 'ft=diff' 
+ls --color=always -1 | VIM_TERMINAL=1 vpager -VnC 'ft=diff' 
