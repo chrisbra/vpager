@@ -35,6 +35,7 @@ SYNOPSIS
         correct syntax highlighting.
     -n  Clear the previous buffer in Vim
     -V  create a new vertical window in Vim
+    -Q  parse the output back in the quickfix list
 
 EXAMPLES
   git diff | vpager -nC 'ft=diff'
@@ -42,6 +43,12 @@ EXAMPLES
   Copies the output of git diff into a buffer inside Vim. Any previous
   output in the buffer will be cleared and the filetype will be set
   to "diff", for proper syntax highlighting.
+
+  grep -n <searchterm> files | vpager -Q
+
+  Parses the grep -n output, copies it back into the quickfix buffer
+  and opens the first result in a new window.
+  
 ```
 
 

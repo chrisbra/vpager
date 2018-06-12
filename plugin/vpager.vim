@@ -55,12 +55,15 @@ function! Tapi_Vpager_setup_post(bufnum, arglist) "{{{1 Setup VPAGER Options
       call win_gotoid(s:winid)
     endif
     " Use a default errorformat filename:linenr
-    setl errorformat=%f:%l
+    setl errorformat=%f:%l:%m
     for value in a:arglist[1:]
       try
         exe "sil " value
       endtry
     endfor
+    if len(a:arglist) > 1
+      copen
+    endif
   endif
 endfunction
 function! Tapi_Vpager(bufnum, arglist) "{{{1 Read Vpager input
