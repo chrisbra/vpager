@@ -30,6 +30,7 @@ init(){ #{{{1 initialize some Variables needed to control options send to Vim
   VIMOPT="${VIMOPT:=}"
   NEW="${NEW:=}"
   VERT="${VERT:=}"
+  QF="${QF:=}"
 
   check_python
 }
@@ -54,6 +55,14 @@ vim_setup(){ #{{{1 Send initial options to Vim.
   fi
   ARG="[\"vpager_setup\", ${ARG:=\"\"}]";
   printf "${ESC}]51;[\"call\", \"Tapi_Vpager_setup\", ${ARG}]${BELL}"
+}
+vim_setup_post(){ #{{{1 Send options to Vim afterwards
+  ARG=""
+  if [ -n "${QF}" ]; then
+    ARG="\"cbuf\""
+    ARG="[\"vpager_setup_post\", ${ARG}]";
+    printf "${ESC}]51;[\"call\", \"Tapi_Vpager_setup_post\", ${ARG}]${BELL}"
+  fi
 }
 json_escape() { #{{{1 JSON Escape the input, uses python
   printf '%s' "$1" | python -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
@@ -94,6 +103,7 @@ cat << EOF
         correct syntax highlighting.
     -n  Clear the previous buffer in Vim
     -V  Open a vertical split window in Vim
+    -Q  Open the result in the quickfix list
 
 EXAMPLES
   git diff | vpager -nC 'ft=diff'
@@ -121,12 +131,13 @@ check_input() { #{{{ Check if reading stdin or a file
 }
 #{{{1End of sub-routine, main flow
 # Process commandline parameters
-while getopts "nhvVC:" ARGS; do
+while getopts "nhvVQC:" ARGS; do
   case ${ARGS} in
     v) getVersion; exit 0 ;;
     C) VIMOPT=${OPTARG} ;;
     n) NEW="1" ;;
     V) VERT="1" ;;
+    Q) QF="1" ;;
     h) display_help; exit 0 ;;
     *) display_help; exit 1 ;;
   esac
@@ -137,7 +148,7 @@ shift `expr ${OPTIND} - 1`
 pre_init
 check_input $1
 
-if [ -z "${VIM_TERMINAL+x}" ]; then
+if [ -z "${VIM_TERMINAL+x}" -a -z "${VIM_SERVERNAME+x}" ]; then
   # variable unset, not running inside Vim, so simply dump the input
   while IFS= read -r line; do
     printf "%s\n" "$line"
@@ -146,4 +157,5 @@ else
   init
   vim_setup
   main
+  vim_setup_post
 fi

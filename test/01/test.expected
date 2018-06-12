@@ -14,6 +14,7 @@ SYNOPSIS
         correct syntax highlighting.
     -n  Clear the previous buffer in Vim
     -V  Open a vertical split window in Vim
+    -Q  Open the result in the quickfix list
 
 EXAMPLES
   git diff | vpager -nC 'ft=diff'

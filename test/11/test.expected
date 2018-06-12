@@ -1,0 +1,2 @@
+]51;["call", "Tapi_Vpager_setup", ["vpager_setup", ""]]]51;["call", "Tapi_Vpager",  ["vpager", "file1:10"]]file1:10
+]51;["call", "Tapi_Vpager_setup_post", ["vpager_setup_post", "cbuf"]]

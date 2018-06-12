@@ -1,0 +1,1 @@
+echo "file1:10" | VIM_TERMINAL=1 vpager

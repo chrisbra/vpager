@@ -45,6 +45,24 @@ function! Tapi_Vpager_setup(bufnum, arglist) "{{{1 Setup VPAGER Options
     endfor
   endif
 endfunction
+function! Tapi_Vpager_setup_post(bufnum, arglist) "{{{1 Setup VPAGER Options
+  if type(a:arglist) == type([]) && len(a:arglist) > 1
+        \ && a:arglist[0] ==# 'vpager_setup_post'
+    if !exists("s:winid")
+      let s:winid = s:SetupWindow()
+    endif
+    if s:winid != win_getid()
+      call win_gotoid(s:winid)
+    endif
+    " Use a default errorformat filename:linenr
+    setl errorformat=%f:%l
+    for value in a:arglist[1:]
+      try
+        exe "sil " value
+      endtry
+    endfor
+  endif
+endfunction
 function! Tapi_Vpager(bufnum, arglist) "{{{1 Read Vpager input
   " Safety meaure
   if type(a:arglist) == type([]) && len(a:arglist) >= 2
