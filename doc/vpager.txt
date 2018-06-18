@@ -113,6 +113,7 @@ Currently the shell script supports the following options and arguments: >
         correct syntax highlighting.
     -n  Clear the previous buffer in Vim
     -V  Open a vertical split window in Vim
+    -Q  Parse the output back into the quickfix list
 
  EXAMPLES
   git diff | vpager -nC 'ft=diff'
@@ -120,6 +121,11 @@ Currently the shell script supports the following options and arguments: >
   Copies the output of git diff into a buffer inside Vim. Any previous
   output in the buffer will be cleared and the filetype will be set
   to "diff", for proper syntax highlighting.
+
+  grep -n <searchterm> files | vpager -Q
+
+  Parses the grep -n output, copies it back into the quickfix buffer
+  and opens the first result in a new window.
 
 ============================================================================
 2. Configuration                                               *VPager-config*
@@ -148,6 +154,9 @@ Copyright: (©) 2018 by Christian Brabandt
 ============================================================================
 5. Changelog                                              *Vpager-changelog*
 ============================================================================
+
+0.2: "{{{2
+- Allow to parse the output back into the quickfix list
 
 0.1: May 7th, 2018 "{{{1
 
