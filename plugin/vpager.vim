@@ -12,6 +12,8 @@
 " Load Once: {{{1
 if exists("g:loaded_vpager") || &cp
   finish
+elseif has("nvim")
+  finish
 elseif !(v:version > 800 || v:version == 800 && has("patch1647"))
   echoerr "Vpager needs at least Vim 8.0.1647"
   finish
