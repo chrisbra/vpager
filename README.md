@@ -1,4 +1,4 @@
-# Vpager plugin [![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://saythanks.io/to/chrisbra)
+# Vpager plugin [![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://saythanks.io/to/cb%40256bit.org)
 > A Vim plugin to copy output of vims terminal to a new buffer.
 
 This plugin contains a shell implementation of a pager, that will take the input and send it to a vim plugin. The Vim plugin processes the input and stores it in a new window.
