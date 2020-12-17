@@ -7,7 +7,7 @@
 # Author: Christian Brabandt <cb@256bit.org>
 # Repository: https://github.com/chrisbra/vpager
 # License: BSD
-VERSION=0.2
+VERSION=0.3
 pre_init() { #{{{1 Set some variables that will always be read
 #set -x
 red=$(tput setaf 1)
@@ -26,13 +26,17 @@ init(){ #{{{1 initialize some Variables needed to control options send to Vim
   ESC=`printf "\e"`
   BELL=`printf "\a"`
   PRE=${ESC}']51;["call", "Tapi_Vpager", '
+  PRE_DROP=${ESC}']51;["drop", '
   POST=']'${BELL}
   VIMOPT="${VIMOPT:=}"
   NEW="${NEW:=}"
   VERT="${VERT:=}"
+  DROP="${DROP:=}"
   QF="${QF:=}"
 
-  check_python
+  if [ -z "${DROP}" ]; then
+    check_python
+  fi
 }
 vim_setup(){ #{{{1 Send initial options to Vim.
   ARG=""
@@ -83,6 +87,7 @@ cat << EOF
 
 SYNOPSIS
     `basename $0` [-nV -C option] [File]
+    `basename $0` -e File
     `basename $0` [-h|-v]
 
 EOF
@@ -102,6 +107,7 @@ cat << EOF
     -C	Pass options to Vim. Can be used to e.g. set the filetype for
         correct syntax highlighting.
     -n  Clear the previous buffer in Vim
+    -e  Open the file directly in Vim
     -V  Open a vertical split window in Vim
     -Q  Open the result in the quickfix list
 
@@ -112,6 +118,11 @@ EXAMPLES
   output in the buffer will be cleared and the filetype will be set
   to "diff", for proper syntax highlighting.
 
+  vpager -e /usr/share/doc/vim/changelog.gz
+
+  When run from within vims own terminal, will open Vims changelog file
+  in a new window
+
 EOF
 }
 getVersion(){ #{{{1 Print version
@@ -120,6 +131,9 @@ $(basename "${0}") Version: ${VERSION}
 EOF
 }
 check_input() { #{{{ Check if reading stdin or a file
+  if [ -n "${DROP}" ]; then
+    return
+  fi
   INPUT="${INPUT:=/dev/stdin}"
   if [ -t 0 -a -z "$1" ]; then
     printf "`basename $0`: ${red}Error${reset}: no input available.\n"
@@ -131,10 +145,11 @@ check_input() { #{{{ Check if reading stdin or a file
 }
 #{{{1End of sub-routine, main flow
 # Process commandline parameters
-while getopts "nhvVQC:" ARGS; do
+while getopts "nhvVQC:e" ARGS; do
   case ${ARGS} in
     v) getVersion; exit 0 ;;
     C) VIMOPT=${OPTARG} ;;
+    e) DROP="1" ;;
     n) NEW="1" ;;
     V) VERT="1" ;;
     Q) QF="1" ;;
@@ -148,11 +163,24 @@ shift `expr ${OPTIND} - 1`
 pre_init
 check_input $1
 
-if [ -z "${VIM_TERMINAL+x}" -a -z "${VIM_SERVERNAME+x}" ]; then
+if [ -z "${VIM_TERMINAL}" -a -z "${VIM_SERVERNAME}" ]; then
   # variable unset, not running inside Vim, so simply dump the input
-  while IFS= read -r line; do
-    printf "%s\n" "$line"
-  done < "$INPUT"
+  if [ -n "${DROP}" ]; then
+    vim "$@"
+  else
+    while IFS= read -r line; do
+      printf "%s\n" "$line"
+    done < "$INPUT"
+  fi
+elif [ -n "${DROP}" ]; then
+  init
+  for file; do
+    #start="$(echo $file|cut -c1)"
+    #if [ "$start" != '/' ]; then
+    #  file=$(printf "%s/%s", "$PWD" "$file")
+    #fi
+    printf "${PRE_DROP} \"%s\"${POST}\n" "$file"
+  done
 else
   init
   vim_setup
