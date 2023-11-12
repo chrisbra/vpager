@@ -12,10 +12,15 @@ Use the plugin manager of your choice.
 
 Also available at [vim.org](https://www.vim.org/scripts/script.php?script_id=5682)
 
+### Requirements
+It requires Python with the `json` module to properly json encode the input.
+
 ### Usage
 This makes use of Vims built in terminal and the provided terminal API. You need at least Vim version [8.0.1647](https://github.com/vim/vim/releases/tag/v8.0.1647)
 
-Use the provided `vpager.sh` script and pipe input into it. I suggest to put it into your $PATH, to be easily available. Note, it requires python, to properly json encode the input.
+Use the provided `vpager` script and pipe input into it.
+Its containing folder is added to your local `$PATH` inside Vim.
+(If not found, please ensure that `vpager`'s executable flag is set.)
 
 The script supports the following options:
 
@@ -26,13 +31,14 @@ NAME
     terminal. The output will be copied to a new buffer in Vim.
 
 SYNOPSIS
-    vpager [-n -C option]
+    vpager [-enVQ -C option] [file]
     vpager [-h|-v]
 
     -v  display version
     -h  display help
     -C  Pass options to Vim. Can be used to e.g. set the filetype for
         correct syntax highlighting.
+    -e  open the file in the instance of vim that is running the terminal
     -n  Clear the previous buffer in Vim
     -V  create a new vertical window in Vim
     -Q  parse the output back in the quickfix list
@@ -51,6 +57,9 @@ EXAMPLES
   
 ```
 
+### Similar
+
+Inside a terminal in vim, [vim-terminal-help](https://github.com/skywind3000/vim-terminal-help/) opens a file in the vim instance that spawned that terminal.
 
 ### License & Copyright
 

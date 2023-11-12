@@ -84,8 +84,9 @@ A screen capture can be found here: https://github.com/chrisbra/vpager
 
                                                                   *vpager-sh*
 The shell script vpager is distributed alongside with the vpager Vim plugin
-and resides in the plugin/ folder. It is best to copy it to your local $PATH
-and make it executable (`chmod +x vpager`).
+and resides in the plugin/ folder. Its containing folder is added to your
+local $PATH inside Vim. (If not found, please ensure that its executable flag
+is set.)
 
 The vpager shell script supports some arguments to configure how the content
 will be handled by Vim. So you can e.g. tell Vim to handle the resulting
@@ -104,13 +105,14 @@ Currently the shell script supports the following options and arguments: >
     output.
 
  SYNOPSIS
-    vpager [-nV -C option] [File]
+    vpager [-enVQ -C option] [File]
     vpager [-h|-v]
 
     -v  display version
     -h  display help
     -C  Pass options to Vim. Can be used to e.g. set the filetype for
         correct syntax highlighting.
+    -e  open the file in the instance of vim that is running the terminal
     -n  Clear the previous buffer in Vim
     -V  Open a vertical split window in Vim
     -Q  Parse the output back into the quickfix list

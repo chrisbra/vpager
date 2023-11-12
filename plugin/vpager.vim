@@ -9,6 +9,7 @@
 " TODO: - Remove ANSI Escape Sequences?
 "       - allow option to pass current PWD to Vim
 " ---------------------------------------------------------------------
+
 " Load Once: {{{1
 if exists("g:loaded_vpager") || &cp
   finish
@@ -24,6 +25,18 @@ let g:loaded_vpager = 1
 let s:keepcpo       = &cpo
 let s:bufname       = 'VPAGER'
 set cpo&vim
+
+" add directory of vpager to $PATH inside Vim
+let s:script_path = fnamemodify(resolve(expand('<sfile>:p')), ':h')
+if stridx($PATH, s:script_path) < 0
+	if has('win32')
+		let $PATH .= ';' . s:script_path
+	elseif has('unix')
+		let $PATH .= ':' . s:script_path
+	endif
+endif
+unlet s:script_path
+
 function! s:SetupWindow() "{{{1 Setup VPAGER Window
   " Create window
   if bufexists(s:bufname)
