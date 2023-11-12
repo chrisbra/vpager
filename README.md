@@ -13,7 +13,6 @@ Use the plugin manager of your choice.
 Also available at [vim.org](https://www.vim.org/scripts/script.php?script_id=5682)
 
 ### Requirements
-
 It requires Python with the `json` module to properly json encode the input.
 
 ### Usage
@@ -58,6 +57,9 @@ EXAMPLES
   
 ```
 
+### Similar
+
+Inside a terminal in vim, [vim-terminal-help](https://github.com/skywind3000/vim-terminal-help/) opens a file in the vim instance that spawned that terminal.
 
 ### License & Copyright
 
