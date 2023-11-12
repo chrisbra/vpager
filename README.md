@@ -26,13 +26,14 @@ NAME
     terminal. The output will be copied to a new buffer in Vim.
 
 SYNOPSIS
-    vpager [-n -C option]
+    vpager [-enVQ -C option] [file]
     vpager [-h|-v]
 
     -v  display version
     -h  display help
     -C  Pass options to Vim. Can be used to e.g. set the filetype for
         correct syntax highlighting.
+    -e  open the file in the instance of vim that is running the terminal
     -n  Clear the previous buffer in Vim
     -V  create a new vertical window in Vim
     -Q  parse the output back in the quickfix list

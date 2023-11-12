@@ -104,13 +104,14 @@ Currently the shell script supports the following options and arguments: >
     output.
 
  SYNOPSIS
-    vpager [-nV -C option] [File]
+    vpager [-enVQ -C option] [File]
     vpager [-h|-v]
 
     -v  display version
     -h  display help
     -C  Pass options to Vim. Can be used to e.g. set the filetype for
         correct syntax highlighting.
+    -e  open the file in the instance of vim that is running the terminal
     -n  Clear the previous buffer in Vim
     -V  Open a vertical split window in Vim
     -Q  Parse the output back into the quickfix list
