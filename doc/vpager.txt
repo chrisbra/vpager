@@ -15,9 +15,12 @@ Version: 0.1 Mon, May 7th, 2018
 
 
 VPager is a plugin, that allows to pipe output from Vims internal |terminal|
-back to Vim. For that purpose, it comes with a pager like shell script, that
-works as a pager, meaning each Input that is piped into it, will be processed
-and send to Vim (to a new window) and also send back to the terminal.
+back to Vim (under Unix-like OSes like Linux and MacOS; in Microsoft Windows,
+only opening files is supported yet). For that purpose, it comes with
+a pager like shell script, that works as a pager, meaning each Input that is
+piped into it, will be processed and send to Vim (to a new window) and also
+send back to the terminal. It also supports opening files when called with the
+parameter -e in Unix-like OSes and Microsoft Windows.
 
 This allows to e.g. list directory contents and have the contents available in
 Vim (from which you could access the files easily using |gf|: >

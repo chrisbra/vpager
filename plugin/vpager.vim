@@ -28,14 +28,21 @@ set cpo&vim
 
 " add directory of vpager to $PATH inside Vim
 let s:script_path = fnamemodify(resolve(expand('<sfile>:p')), ':h')
-if stridx($PATH, s:script_path) < 0
+let s:bin_path = fnamemodify(s:script_path . '/../bin_path', ':p')
+if stridx($PATH, s:bin_path) < 0
 	if has('win32')
-		let $PATH .= ';' . s:script_path
-	elseif has('unix')
-		let $PATH .= ':' . s:script_path
+		let $PATH .= ';' . s:bin_path
+	else
+		let $PATH .= ':' . s:bin_path
 	endif
 endif
 unlet s:script_path
+unlet s:bin_path
+
+" under Unix-like OSes we assume Vim to be in $PATH as vim
+if has('win32')
+  let $VIM_EXE = v:progpath
+endif
 
 function! s:SetupWindow() "{{{1 Setup VPAGER Window
   " Create window
