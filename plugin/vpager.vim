@@ -28,7 +28,7 @@ set cpo&vim
 
 " add directory of vpager to $PATH inside Vim
 let s:script_path = fnamemodify(resolve(expand('<sfile>:p')), ':h')
-let s:bin_path = fnamemodify(s:script_path . '/../bin_path', ':p')
+let s:bin_path = fnamemodify(s:script_path . '/../bin', ':p')
 if stridx($PATH, s:bin_path) < 0
 	if has('win32')
 		let $PATH .= ';' . s:bin_path
