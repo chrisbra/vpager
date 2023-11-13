@@ -60,6 +60,8 @@ EXAMPLES
   
 ```
 
+A command `drop` is provided as alias for `vpager -e`.
+
 ### Similar
 
 Inside a terminal in vim, [vim-terminal-help](https://github.com/skywind3000/vim-terminal-help/) opens a file in the vim instance that spawned that terminal.

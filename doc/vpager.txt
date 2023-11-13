@@ -120,6 +120,8 @@ Currently the shell script supports the following options and arguments: >
     -V  Open a vertical split window in Vim
     -Q  Parse the output back into the quickfix list
 
+ A command *drop* is provided as alias for vpager -e.
+
  EXAMPLES
   git diff | vpager -nC 'ft=diff'
 
